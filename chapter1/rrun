@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# কোনো ধাপে এরর হলে স্ক্রিপ্ট সাথে সাথে বন্ধ হয়ে যাবে
+set -e
+
+FILE="$1"
+
+if [ -z "$FILE" ]; then
+    echo "Usage: ./rgo <rust-file>"
+    exit 1
+fi
+
+if [ ! -f "$FILE" ]; then
+    echo "Error: File not found: $FILE"
+    exit 1
+fi
+
+# ফাইলের নাম থেকে .rs বাদ দিয়ে শুধু নামটা ভ্যারিয়েবলে রাখা হচ্ছে (যেমন: main.rs -> main)
+BINARY_FILE="${FILE%.rs}"
+
+# ১. প্রথমে কম্পাইল হবে, সফল হলে তবেই পরের লাইনে যাবে
+echo "▶ Running: rustc $FILE"
+rustc "$FILE" && \
+\
+# ২. কম্পাইল সফল হওয়ার পর শুধু এই ফাইলের সোর্স ও বাইনারি লিস্ট করবে
+echo -e "\n📄 Listing generated files:" && \
+ls -la $BINARY_FILE* && \
+\
+# ৩. লিস্ট করার পর ফাইনালি বাইনারি রান করবে
+echo -e "\n▶ Running binary: ./$BINARY_FILE" && \
+./"$BINARY_FILE"
