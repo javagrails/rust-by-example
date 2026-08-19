@@ -6,7 +6,7 @@ set -e
 FILE="$1"
 
 if [ -z "$FILE" ]; then
-    echo "Usage: ./rgo <rust-file>"
+    echo "Usage: ./rrun <rust-file>"
     exit 1
 fi
 
@@ -23,8 +23,9 @@ echo "▶ Running: rustc $FILE"
 rustc "$FILE" && \
 \
 # ২. কম্পাইল সফল হওয়ার পর শুধু এই ফাইলের সোর্স ও বাইনারি লিস্ট করবে
-echo -e "\n📄 Listing generated files:" && \
-ls -la $BINARY_FILE* && \
+echo -e "\n✅ Listing generated files:" && \
+# ls -la $BINARY_FILE* && \
+ls -lah $BINARY_FILE* | awk '{print $1, $5, $12, $13, $NF}' | column -t && \
 \
 # ৩. লিস্ট করার পর ফাইনালি বাইনারি রান করবে
 echo -e "\n▶ Running binary: ./$BINARY_FILE" && \
