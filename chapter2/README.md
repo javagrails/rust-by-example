@@ -1,3 +1,3 @@
 
 
-### chapter2 just started & it's ongoing
+### chapter2 just started working
